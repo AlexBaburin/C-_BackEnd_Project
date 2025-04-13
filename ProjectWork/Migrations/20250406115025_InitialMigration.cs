@@ -94,7 +94,7 @@ namespace ProjectWork.Migrations
         JOIN
             order_status s ON o.status_id = s.status_id
         WHERE
-            s.name = 'completed'
+            s.name = 'complete'
         AND DATE(o.time) = DATE(c.birth_date)
         GROUP BY
         c.client_id, c.name, c.surname;
@@ -103,16 +103,17 @@ namespace ProjectWork.Migrations
             ");
 
             migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION AverageCheck()
-    RETURNS TABLE(Hour INT, AverageCheck BIGINT) as $$
+    RETURNS TABLE(Hour INT, AverageCheck DOUBLE PRECISION) as $$
     BEGIN
+RETURN QUERY
 SELECT
     EXTRACT(HOUR FROM time)::INTEGER AS hour,
-    AVG(amount) AS average_check
+    AVG(amount)::DOUBLE PRECISION AS average_check
 FROM
     ""order""
 JOIN order_status on ""order"".status_id = order_status.status_id
 WHERE
-    order_status.name = 'Completed'
+    order_status.name = 'complete'
 GROUP BY
     EXTRACT(HOUR FROM time)
 ORDER BY

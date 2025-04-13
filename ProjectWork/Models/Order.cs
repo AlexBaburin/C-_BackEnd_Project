@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectWork.Models
@@ -27,5 +28,14 @@ namespace ProjectWork.Models
         [ForeignKey("ClientId")]
         [InverseProperty("Orders")]
         public virtual Client Client { get; set; } = null!;
+    }
+
+    public class OrderViewModel
+    {
+        public int OrderId { get; set; }
+        public int Amount { get; set; }
+        public DateTime Time { get; set; }
+        public int StatusId { get; set; }
+        public int ClientId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectWork.Models.Service.Interface;
 
 namespace ProjectWork.Models.Service
 {

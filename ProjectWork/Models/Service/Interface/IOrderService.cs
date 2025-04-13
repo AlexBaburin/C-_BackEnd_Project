@@ -1,4 +1,4 @@
-﻿namespace ProjectWork.Models.Service
+﻿namespace ProjectWork.Models.Service.Interface
 {
     public interface IOrderService
     {
@@ -7,6 +7,6 @@
         Task<Order> CreateOrderAsync(Order Order);
         Task<bool> UpdateOrderAsync(int id, Order Order);
         Task<bool> DeleteOrderAsync(int id);
-        Task<List<AverageCheck>> GetAverageChecksAsync();
+        Task<List<Check>> GetAverageChecksAsync();
     }
 }

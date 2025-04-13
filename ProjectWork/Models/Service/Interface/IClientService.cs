@@ -1,4 +1,4 @@
-﻿namespace ProjectWork.Models.Service
+﻿namespace ProjectWork.Models.Service.Interface
 {
     public interface IClientService
     {

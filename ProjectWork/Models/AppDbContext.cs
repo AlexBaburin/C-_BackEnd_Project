@@ -22,7 +22,7 @@ namespace ProjectWork.Models
         {
             modelBuilder.Entity<BirthdayOrder>()
            .ToTable("BirthdayOrder", t => t.ExcludeFromMigrations());
-            modelBuilder.Entity<AverageCheck>()
+            modelBuilder.Entity<Check>()
            .ToTable("AverageCheck", t => t.ExcludeFromMigrations());
 
             base.OnModelCreating(modelBuilder);
@@ -35,8 +35,8 @@ namespace ProjectWork.Models
                                    .FromSqlRaw("SELECT * FROM birthdaycompleted()")
                                    .ToListAsync();
         }
-        public DbSet<AverageCheck> AverageChecks { get; set; }
-        public async Task<List<AverageCheck>> GetAverageChecks()
+        public DbSet<Check> AverageChecks { get; set; }
+        public async Task<List<Check>> GetAverageChecks()
         {
             return await this.AverageChecks
                                   .FromSqlRaw("SELECT * FROM averagecheck()")

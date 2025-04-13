@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectWork.Models.Service.Interface;
 
 namespace ProjectWork.Models.Service
 {
@@ -11,7 +12,7 @@ namespace ProjectWork.Models.Service
             _context = context;
         }
 
-        public async Task<List<AverageCheck>> GetAverageChecksAsync()
+        public async Task<List<Check>> GetAverageChecksAsync()
         {
             return await _context.GetAverageChecks();
         }
