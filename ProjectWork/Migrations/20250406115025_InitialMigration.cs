@@ -77,6 +77,49 @@ namespace ProjectWork.Migrations
                 name: "IX_order_status_id",
                 table: "order",
                 column: "status_id");
+
+            migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION BirthdayCompleted()
+    RETURNS TABLE(ID INT, Surname TEXT, Name TEXT, Amount INT) as $$
+    BEGIN
+        RETURN QUERY
+        SELECT
+            c.client_id,
+            c.name,
+            c.surname,
+            cast(SUM(o.amount) as INT) AS total_order_amount
+        FROM
+            client c
+        JOIN
+            ""order"" o ON c.client_id = o.client_id
+        JOIN
+            order_status s ON o.status_id = s.status_id
+        WHERE
+            s.name = 'completed'
+        AND DATE(o.time) = DATE(c.birth_date)
+        GROUP BY
+        c.client_id, c.name, c.surname;
+    END
+    $$ LANGUAGE plpgsql;
+            ");
+
+            migrationBuilder.Sql(@"CREATE OR REPLACE FUNCTION AverageCheck()
+    RETURNS TABLE(Hour INT, AverageCheck BIGINT) as $$
+    BEGIN
+SELECT
+    EXTRACT(HOUR FROM time)::INTEGER AS hour,
+    AVG(amount) AS average_check
+FROM
+    ""order""
+JOIN order_status on ""order"".status_id = order_status.status_id
+WHERE
+    order_status.name = 'Completed'
+GROUP BY
+    EXTRACT(HOUR FROM time)
+ORDER BY
+    hour DESC;
+END
+$$ LANGUAGE plpgsql;
+            ");
         }
 
         /// <inheritdoc />
@@ -90,6 +133,10 @@ namespace ProjectWork.Migrations
 
             migrationBuilder.DropTable(
                 name: "order_status");
+
+            migrationBuilder.Sql("DROP FUNCTION IF EXISTS BirthdayCompleted();");
+
+            migrationBuilder.Sql("DROP FUNCTION IF EXISTS AverageCheck();");
         }
     }
 }

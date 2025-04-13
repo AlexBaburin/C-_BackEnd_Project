@@ -47,7 +47,7 @@ namespace ProjectWork.Migrations
 
                     b.HasKey("ClientId");
 
-                    b.ToTable("client");
+                    b.ToTable("client", (string)null);
                 });
 
             modelBuilder.Entity("ProjectWork.Models.Order", b =>
@@ -81,7 +81,7 @@ namespace ProjectWork.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("order");
+                    b.ToTable("order", (string)null);
                 });
 
             modelBuilder.Entity("ProjectWork.Models.OrderStatus", b =>
@@ -100,7 +100,7 @@ namespace ProjectWork.Migrations
 
                     b.HasKey("StatusId");
 
-                    b.ToTable("order_status");
+                    b.ToTable("order_status", (string)null);
                 });
 
             modelBuilder.Entity("ProjectWork.Models.Order", b =>
