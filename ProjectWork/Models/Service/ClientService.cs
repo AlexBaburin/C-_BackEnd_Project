@@ -18,9 +18,34 @@ namespace ProjectWork.Models.Service
             return await _context.GetBirthdayCompleted();
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<IEnumerable<Client>> GetAllClientsAsync(string filter, int page, int page_size)
         {
-            return await _context.Clients.ToListAsync();
+            var clients = await _context.Clients.ToListAsync();
+            List<Client> result = new List<Client>();
+            if (!String.IsNullOrWhiteSpace(filter))
+            {
+                foreach (var client in clients)
+                {
+                    if (client.ClientId.ToString() == filter ||
+                        client.Surname == filter ||
+                        client.Name == filter ||
+                        client.BirthDate.ToString() == filter)
+                    {
+                        result.Add(client);
+                    }
+                }
+            }
+            if (page_size < result.Count)
+            {
+                clients.Clear();
+                for (int i = (page - 1) * page_size; i < result.Count || i < page * page_size; i++)
+                {
+                    clients.Add(result[i]);
+                }
+                result.Clear();
+                result = clients;
+            }
+            return result;
         }
 
         public async Task<Client?> GetClientByIdAsync(int id)

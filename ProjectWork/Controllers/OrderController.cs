@@ -17,13 +17,19 @@ namespace ProjectWork.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        [ResponseCache(Duration = 60)]
+        [ProducesResponseType(200)]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders([FromQuery] string filter, [FromQuery] int page,
+            [FromQuery] int page_size)
         {
-            var Orders = await _orderService.GetAllOrdersAsync();
+            var Orders = await _orderService.GetAllOrdersAsync(filter, page, page_size);
             return Ok(Orders);
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
             var Order = await _orderService.GetOrderByIdAsync(id);
@@ -34,6 +40,8 @@ namespace ProjectWork.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<Order>> PostOrder(OrderViewModel OrderVM)
         {
             var Order = new Order
@@ -56,6 +64,8 @@ namespace ProjectWork.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> PutOrder(int id, OrderViewModel OrderVM)
         {
             var Order = new Order
@@ -70,17 +80,19 @@ namespace ProjectWork.Controllers
             if (!updated)
                 return NotFound();
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var deleted = await _orderService.DeleteOrderAsync(id);
             if (!deleted)
                 return NotFound();
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpGet("hourly-average")]

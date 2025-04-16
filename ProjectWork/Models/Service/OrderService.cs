@@ -17,9 +17,35 @@ namespace ProjectWork.Models.Service
             return await _context.GetAverageChecks();
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(string filter, int page, int page_size)
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
+            List<Order> result = new List<Order>();
+            if (!String.IsNullOrWhiteSpace(filter))
+            {
+                foreach (var order in orders)
+                {
+                    if (order.OrderId.ToString() == filter ||
+                        order.StatusId.ToString() == filter ||
+                        order.Amount.ToString() == filter ||
+                        order.ClientId.ToString() == filter ||
+                        order.Time.ToString() == filter)
+                    {
+                        result.Add(order);
+                    }
+                }
+            }
+            if (page_size < result.Count)
+            {
+                orders.Clear();
+                for (int i = (page - 1) * page_size; i < result.Count || i < page * page_size; i++)
+                {
+                    orders.Add(result[i]);
+                }
+                result.Clear();
+                result = orders;
+            }
+            return result;
         }
 
         public async Task<Order?> GetOrderByIdAsync(int id)

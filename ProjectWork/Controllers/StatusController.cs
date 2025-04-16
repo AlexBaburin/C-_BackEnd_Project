@@ -17,6 +17,9 @@ namespace ProjectWork.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 60)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<IEnumerable<OrderStatus>>> GetStatuses()
         {
             var Statuss = await _statusService.GetAllStatusesAsync();
@@ -24,6 +27,8 @@ namespace ProjectWork.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<OrderStatus>> GetStatus(int id)
         {
             var Status = await _statusService.GetStatusByIdAsync(id);
@@ -34,6 +39,8 @@ namespace ProjectWork.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<OrderStatus>> PostStatus(OrderStatus Status)
         {
             try
@@ -48,23 +55,27 @@ namespace ProjectWork.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> PutStatus(int id, OrderStatus Status)
         {
             var updated = await _statusService.UpdateStatusAsync(id, Status);
             if (!updated)
                 return NotFound();
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteStatus(int id)
         {
             var deleted = await _statusService.DeleteStatusAsync(id);
             if (!deleted)
                 return NotFound();
 
-            return NoContent();
+            return Ok();
         }
     }
 }
